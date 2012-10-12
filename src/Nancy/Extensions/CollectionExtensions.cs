@@ -1,4 +1,6 @@
-﻿namespace Nancy.Extensions
+﻿using System.ComponentModel;
+
+namespace Nancy.Extensions
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +9,21 @@
 
     public static class CollectionExtensions
     {
+        public static IDictionary<string, object> DictionaryFromAnonymousObject(object values)
+        {
+            var ret = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            if (values != null)
+            {
+                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(values);
+                foreach (PropertyDescriptor prop in props)
+                {
+                    object val = prop.GetValue(values);
+                    ret.Add(prop.Name, val);
+                }
+            }
+            return ret;
+        }
+
         public static IDictionary<string, IEnumerable<string>> ToDictionary(this NameValueCollection source)
         {
             return source.AllKeys.ToDictionary<string, string, IEnumerable<string>>(key => key, source.GetValues);
