@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Nancy.ViewEngines.Razor
+﻿namespace Nancy.ViewEngines.Razor
 {
     using System;
     using System.IO;
-    using System.Linq.Expressions;
 
     /// <summary>
     /// Helpers to generate html content.
