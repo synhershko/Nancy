@@ -36,7 +36,7 @@ namespace Nancy.ViewEngines.Razor.Html
             // TODO: add more htmlAttributes based on ModelMetadata
             // TODO: support value, format
 
-            return TextBox(html, htmlFieldName, null, htmlAttributes);
+            return TextBox(html, htmlFieldName, /* TODO: get value from Model */ null, htmlAttributes);
         }
 
         public static IHtmlString TextBox<TModel>(this HtmlHelpers<TModel> html, string name, Object value)
