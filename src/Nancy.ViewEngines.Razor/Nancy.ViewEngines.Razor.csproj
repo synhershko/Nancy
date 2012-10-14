@@ -114,6 +114,7 @@
     <Compile Include="HtmlHelpers.cs" />
     <Compile Include="Html\DefaultEditorTemplates.cs" />
     <Compile Include="Html\EditorExtensions.cs" />
+    <Compile Include="Html\HiddenExtensions.cs" />
     <Compile Include="Html\LabelExtensions.cs" />
     <Compile Include="Html\TextBoxExtensions.cs" />
     <Compile Include="IHtmlString.cs" />
