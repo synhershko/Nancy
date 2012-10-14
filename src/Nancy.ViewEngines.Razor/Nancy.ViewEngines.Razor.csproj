@@ -112,6 +112,7 @@
     <Compile Include="DefaultRazorConfiguration.cs" />
     <Compile Include="HelperResult.cs" />
     <Compile Include="HtmlHelpers.cs" />
+    <Compile Include="Html\CheckBoxExtensions.cs" />
     <Compile Include="Html\DefaultEditorTemplates.cs" />
     <Compile Include="Html\EditorExtensions.cs" />
     <Compile Include="Html\HiddenExtensions.cs" />
