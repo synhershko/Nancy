@@ -118,6 +118,7 @@
     <Compile Include="Html\HiddenExtensions.cs" />
     <Compile Include="Html\LabelExtensions.cs" />
     <Compile Include="Html\RadioButtonExtensions.cs" />
+    <Compile Include="Html\TextAreaExtensions.cs" />
     <Compile Include="Html\TextBoxExtensions.cs" />
     <Compile Include="IHtmlString.cs" />
     <Compile Include="IRazorConfiguration.cs" />
