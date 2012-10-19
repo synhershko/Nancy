@@ -9,17 +9,32 @@ namespace Nancy.ViewEngines.Razor.Html
 {
     public static class TextBoxExtensions
     {
-        public static IHtmlString TextBoxFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression)
+        public static IHtmlString TextBoxFor<TModel, TValue>(this HtmlHelpers<TModel> htmlHelper, Expression<Func<TModel, TValue>> expression)
         {
-            return TextBoxFor(html, expression, null);
+            return TextBoxFor(htmlHelper, expression, null, null);
         }
 
-        public static IHtmlString TextBoxFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, object htmlAttributes)
+        public static IHtmlString TextBoxFor<TModel, TValue>(this HtmlHelpers<TModel> htmlHelper, Expression<Func<TModel, TValue>> expression, Object htmlAttributes)
         {
-            return TextBoxFor(html, expression, CollectionExtensions.DictionaryFromAnonymousObject(htmlAttributes));
+            return TextBoxFor(htmlHelper, expression, null, CollectionExtensions.DictionaryFromAnonymousObject(htmlAttributes));
         }
 
-        public static IHtmlString TextBoxFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, IDictionary<string, object> htmlAttributes)
+        public static IHtmlString TextBoxFor<TModel, TValue>(this HtmlHelpers<TModel> htmlHelper, Expression<Func<TModel, TValue>> expression, IDictionary<string, object> htmlAttributes)
+        {
+            return TextBoxFor(htmlHelper, expression, null, htmlAttributes);
+        }
+
+        public static IHtmlString TextBoxFor<TModel, TProperty>(this HtmlHelpers<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string format)
+        {
+            return TextBoxFor(htmlHelper, expression, format, null);
+        }
+
+        public static IHtmlString TextBoxFor<TModel, TProperty>(this HtmlHelpers<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string format, Object htmlAttributes)
+        {
+            return TextBoxFor(htmlHelper, expression, format, CollectionExtensions.DictionaryFromAnonymousObject(htmlAttributes));
+        }
+
+        public static IHtmlString TextBoxFor<TModel, TProperty>(this HtmlHelpers<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, string format, IDictionary<string, Object> htmlAttributes)
         {
             // get the html field name; probably need to run this through convention first
             var mi = expression.GetTargetMemberInfo();
@@ -36,7 +51,7 @@ namespace Nancy.ViewEngines.Razor.Html
             // TODO: add more htmlAttributes based on ModelMetadata
             // TODO: support value, format
 
-            return TextBox(html, htmlFieldName, /* TODO: get value from Model */ null, htmlAttributes);
+            return TextBox(htmlHelper, htmlFieldName, /* TODO: get value from Model */ null, htmlAttributes);
         }
 
         public static IHtmlString TextBox<TModel>(this HtmlHelpers<TModel> html, string name, Object value)
