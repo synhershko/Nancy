@@ -3,9 +3,14 @@ using Nancy.Extensions;
 
 namespace Nancy.ViewEngines.Razor.Html
 {
+    public interface IModelMetadata
+    {
+        
+    }
+    
     public interface IEditorTemplate
     {
-        IHtmlString EditorTemplate<TModel>(HtmlHelpers<TModel> html, string name, object attributes = null);
+        IHtmlString EditorTemplate<TModel>(HtmlHelpers<TModel> html, string htmlFieldName, object attributes = null);
     }
 
     public class DefaultEditorTemplates

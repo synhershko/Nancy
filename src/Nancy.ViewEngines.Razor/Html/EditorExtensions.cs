@@ -10,27 +10,6 @@ namespace Nancy.ViewEngines.Razor.Html
 {
     public static class EditorExtensions
     {
-        // TODO: Support templates for read-only mode
-        private static readonly Dictionary<string, IEditorTemplate> DefaultEditorActions =
-            new Dictionary<string, IEditorTemplate>(StringComparer.OrdinalIgnoreCase)
-            {
-                //{ "HiddenInput", DefaultEditorTemplates.HiddenInputTemplate },
-                //{ "MultilineText", DefaultEditorTemplates.MultilineTextTemplate },
-                { "Password", new DefaultEditorTemplates.DefaultPasswordEditorTemplate() },
-                { "Text", new DefaultEditorTemplates.DefaultStringEditorTemplate() },
-                //{ "Collection", DefaultEditorTemplates.CollectionTemplate },
-                //{ typeof(bool).Name, DefaultEditorTemplates.BooleanTemplate },
-                { typeof(int).Name, new DefaultEditorTemplates.DefaultIntegerEditorTemplate() },
-                //{ typeof(byte).Name, DefaultEditorTemplates.ByteTemplate },
-                //{ typeof(short).Name, DefaultEditorTemplates.ShortTemplate},
-                //{ typeof(long).Name, DefaultEditorTemplates.LongTemplate },
-                //{ typeof(double).Name, DefaultEditorTemplates.DoubleTemplate },
-                //{ typeof(float).Name, DefaultEditorTemplates.FloatTemplate },
-                //{ typeof(decimal).Name, DefaultEditorTemplates.DecimalTemplate },
-                { typeof(string).Name, new DefaultEditorTemplates.DefaultStringEditorTemplate() },
-                //{ typeof(object).Name, DefaultEditorTemplates.ObjectTemplate },
-            };
-
         private static T GetPropertyValue<T>(this object obj, string propName)
         {
             if (obj == null)
@@ -54,19 +33,37 @@ namespace Nancy.ViewEngines.Razor.Html
 
         public static IHtmlString EditorFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression)
         {
-            return EditorFor(html, expression, null);
+            return EditorFor(html, expression, null, null, null);
         }
 
-        public static IHtmlString EditorFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, object htmlAttributes)
+        public static IHtmlString EditorFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, Object additionalViewData)
         {
-            return EditorFor(html, expression, CollectionExtensions.DictionaryFromAnonymousObject(htmlAttributes));
+            return EditorFor(html, expression, null, null, additionalViewData);
         }
 
-        public static IHtmlString EditorFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, IDictionary<string, object> htmlAttributes)
+        public static IHtmlString EditorFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, string templateName)
         {
-            // get the html field name; probably need to run this through convention first
-            var mi = expression.GetTargetMemberInfo();
-            string htmlFieldName = mi.Name; /* TODO: normalize, conventions */
+            return EditorFor(html, expression, templateName, null, null);
+        }
+
+        public static IHtmlString EditorFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, string templateName, Object additionalViewData)
+        {
+            return EditorFor(html, expression, templateName, null, additionalViewData);
+        }
+
+        public static IHtmlString EditorFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, string templateName, string htmlFieldName)
+        {
+            return EditorFor(html, expression, templateName, htmlFieldName, null);
+        }
+
+        public static IHtmlString EditorFor<TModel, TValue>(this HtmlHelpers<TModel> html, Expression<Func<TModel, TValue>> expression, string templateName, string htmlFieldName, Object additionalViewData)
+        {
+            if (htmlFieldName == null)
+            {
+                // get the html field name; probably need to run this through convention first
+                var mi = expression.GetTargetMemberInfo();
+                htmlFieldName = mi.Name; /* TODO: normalize, conventions */
+            }
 
             IEditorTemplate editor;
             DefaultEditorActions.TryGetValue(mi.ReflectedType.Name, out editor);
@@ -74,6 +71,11 @@ namespace Nancy.ViewEngines.Razor.Html
                 return editor.EditorTemplate(html, htmlFieldName, htmlAttributes);
 
             return NonEncodedHtmlString.Empty;
+        }
+
+        public static IHtmlString Editor<TModel>(this HtmlHelpers<TModel> html, string expression, string templateName = null, string htmlFieldName = null, Object additionalViewData = null)
+        {
+            
         }
     }
 }
